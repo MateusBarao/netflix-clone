@@ -18,3 +18,8 @@
   .alterna {
     flex-direction: row-reverse;
   }
+
+  img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+  }
