@@ -4,45 +4,41 @@ import "./style.css"
 import { useState } from "react";
 
 export default function Filmes (){
-    const [movies, setMovies] = useState([
-        {
-            poster: "https://br.web.img3.acsta.net/pictures/17/05/29/23/31/530814.jpg",
-            title: "Teste",
-            date: "2021",
-            votes: "8.5",
-        },
-        {
-            poster: "https://br.web.img3.acsta.net/pictures/17/05/29/23/31/530814.jpg",
-            title: "Teste",
-            date: "2021",
-            votes: "8.5",
-        },
-        {
-            poster: "https://br.web.img3.acsta.net/pictures/17/05/29/23/31/530814.jpg",
-            title: "Teste",
-            date: "2021",
-            votes: "8.5",
-        },
-        {
-            poster: "https://br.web.img3.acsta.net/pictures/17/05/29/23/31/530814.jpg",
-            title: "Teste",
-            date: "2021",
-            votes: "8.5",
-        },
-    ]);
+    const [movies, setMovies] = useState([]);
+
+    const BASE_URL = process.env.REACT_APP_API_TMDB_BASE_URL;
+
+    const API_KEY = process.env.REACT_APP_API_TMDB_KEY;
+
+    const settings = {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${API_KEY}`
+        }
+    }
+
+    async function addMovie(){
+        const response = await fetch(`${BASE_URL}/movie/popular`, settings);
+
+        const data = await response.json();
+        
+        setMovies([...data.results, ...movies])
+    }
 
     return (
         <div>
             <Header />
             <main className="movies">
                 <div className="movies-list">
+                <button onClick={addMovie}>Adicione um filme</button>
                 {movies.map((movie) => {
                         return(
                             <Movie 
+                                key={movie.id}
                                 title={movie.title}
-                                poster={movie.poster}
-                                date={movie.date}
-                                votes={movie.votes}
+                                poster={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                date={movie.release_date}
+                                votes={movie.vote_average}
                             />
                         );
                     })}
